@@ -1,3 +1,4 @@
+#include <iostream>
 #include "gtest/gtest.h"
 
 using namespace std;
@@ -9,7 +10,11 @@ public:
 };
 
 TEST_F(DummyTestSuite, TwoPlusTwo) {
-    cout << "Welcome to dumb dummy test" << endl;
+    cout << "Welcome to passing dummy test" << endl;
     ASSERT_EQ(2+2,4);
 };
 
+TEST_F(DummyTestSuite, TwoPlusThree) {
+	cout << "Welcome to failing dummy test" << endl;
+	ASSERT_EQ(2 + 3, 6);
+};

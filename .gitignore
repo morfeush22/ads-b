@@ -1,3 +1,6 @@
+build/
+bin/
+
 # Compiled Object files
 *.slo
 *.lo
@@ -8,11 +11,6 @@
 *.gch
 *.pch
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
 # Fortran module files
 *.mod
 *.smod
@@ -22,8 +20,3 @@
 *.la
 *.a
 *.lib
-
-# Executables
-*.exe
-*.out
-*.app

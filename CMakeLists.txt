@@ -3,9 +3,10 @@ project(ads_b)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 
-include_directories(${CMAKE_SOURCE_DIR}/lib)
+include_directories(${CMAKE_SOURCE_DIR}/src)
+file(GLOB_RECURSE SOURCE_FILES src/*.cpp)
 
-add_executable(ads_b ${SOURCE_FILES} bin/main.cpp lib/DummyClass.cpp lib/DummyClass.h)
+add_executable(ads_b ${SOURCE_FILES} main/main.cpp)
 
 set (BUILD_TESTS TRUE)
 if (BUILD_TESTS)
@@ -41,7 +42,7 @@ if (BUILD_TESTS)
     # My targets
     #
     file(GLOB_RECURSE TEST_FILES t/*.cpp)
-    add_executable(Tests ${SOURCE_FILES} ${TEST_FILES} t/00-dummy.cpp t/main.cpp)
+    add_executable(Tests ${SOURCE_FILES} ${TEST_FILES})
     target_compile_definitions(Tests PRIVATE GOOGLE_UNIT_TEST=1)
     target_link_libraries(Tests gtest)
 endif()
