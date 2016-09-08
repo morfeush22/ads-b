@@ -9,6 +9,7 @@ file(GLOB_RECURSE SOURCE_FILES src/*.cpp)
 add_executable(ads_b ${SOURCE_FILES} main/main.cpp)
 
 set (BUILD_TESTS TRUE)
+# downloads and builds gtest and gmock
 if (BUILD_TESTS)
     configure_file(CMakeLists.txt.in
             googletest-download/CMakeLists.txt)
@@ -35,13 +36,7 @@ if (BUILD_TESTS)
                 "${gmock_SOURCE_DIR}/include")
     endif()
 
-    # Now simply link your own targets against gtest, gmock,
-    # etc. as appropriate
-
-    #
-    # My targets
-    #
-    file(GLOB_RECURSE TEST_FILES t/*.cpp)
+    file(GLOB_RECURSE TEST_FILES test/*.cpp)
     add_executable(Tests ${SOURCE_FILES} ${TEST_FILES})
     target_compile_definitions(Tests PRIVATE GOOGLE_UNIT_TEST=1)
     target_link_libraries(Tests gtest)
