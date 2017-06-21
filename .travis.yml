@@ -25,7 +25,7 @@ script:
   - ./ads-b_ut
 
 after_success:
-  - coveralls --root .. -E ".*googletest.*" -E ".*CMakeFiles.*" -E ".*test/.*.cpp.*"
+  - coveralls --gcov /usr/bin/gcov-6 --root .. -E ".*googletest.*" -E ".*CMakeFiles.*" -E ".*test/.*.cpp.*"
 
 notifications:
 email: false
