@@ -7,8 +7,14 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
+    packages:
+      - g++-6
+
+env:
+  - EVAL="CC=gcc-6 && CXX=g++-6"
 
 before_install:
+  - eval "${EVAL}"
   - pip install --user cpp-coveralls
 
 script:
