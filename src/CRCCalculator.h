@@ -49,7 +49,7 @@ void CRCCalculator<T>::CalculateLookupTable() {
 	for (int i = 0; i < LOOKUP_TABLE_SIZE; ++i) {
 		T reg = static_cast<T>(i);
 		for (int j = 0; j < BYTE; ++j) {
-			if (reg & TOP_BIT_MASK == 1)
+			if ((reg & TOP_BIT_MASK) == 1)
 				reg = (reg >> 1) ^ poly_;
 			else
 				reg >>= 1;
