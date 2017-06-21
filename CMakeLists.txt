@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project(ads-b)
 include_directories(${PROJECT_SOURCE_DIR}/src)
+include_directories(${PROJECT_SOURCE_DIR}/test)
 
 set(GOOGLETEST_ROOT googletest/googletest)
 include_directories(
@@ -16,5 +17,6 @@ foreach(source ${GOOGLETEST_SOURCES})
 endforeach()
 add_library(googletest ${GOOGLETEST_SOURCES})
 
-add_executable(ads-b src/main.cpp)
-add_dependencies(ads-b googletest)
+add_executable(ads-b_ut test/main.cpp test/crc_calculator.cpp)
+add_dependencies(ads-b_ut googletest)
+target_link_libraries(ads-b_ut googletest pthread)
