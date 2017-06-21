@@ -1,5 +1,6 @@
-#include <ctype.h>
 #include <array>
+#include <ctype.h>
+#include <vector>
 #include "CRCCalculator.h"
 #include "gtest/gtest.h"
 
@@ -92,4 +93,10 @@ TEST_F(CRCCalculatorTest, CalculatedLookupTableValues) {
 	std::array<type, LOOKUP_TABLE_SIZE> lt = crc_calc_->lookup_table();
 	for(int i = 0; i < LOOKUP_TABLE_SIZE; ++i)
 		EXPECT_EQ(lookup_table_[i], lt[i]);
+}
+
+TEST_F(CRCCalculatorTest, CalculatedCRC) {
+	std::vector<uint8_t> msg {0xf, 0xe};
+	type crc = crc_calc_->CalculateCRC(msg);
+	EXPECT_EQ(0x21f92337, crc);
 }

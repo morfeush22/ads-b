@@ -8,11 +8,15 @@
 #ifndef SRC_CRCCALCULATOR_H_
 #define SRC_CRCCALCULATOR_H_
 
+#include <algorithm>
 #include <array>
 #include <ctype.h>
+#include <vector>
 
 #define BYTE 8
 #define LOOKUP_TABLE_SIZE 256
+#define REG_FINAL UINT32_MAX
+#define REG_INIT UINT32_MAX
 #define TOP_BIT_MASK 0x1
 
 
@@ -27,6 +31,7 @@ public:
 	std::array<T, LOOKUP_TABLE_SIZE> lookup_table() const {
 		return lookup_table_;
 	}
+	T CalculateCRC(const std::vector<uint8_t> &msg);
 
 private:
 	void CalculateLookupTable();
@@ -42,6 +47,15 @@ CRCCalculator<T>::CRCCalculator(T poly): poly_(poly) {
 
 template<typename T>
 CRCCalculator<T>::~CRCCalculator() {
+}
+
+template<typename T>
+T CRCCalculator<T>::CalculateCRC(const std::vector<uint8_t> &msg) {
+	T reg = REG_INIT;
+	std::for_each(msg.begin(), msg.end(), [&reg, this](const uint8_t &byte) {
+		reg = (reg >> BYTE) ^ lookup_table_[static_cast<uint8_t>(reg) ^ byte];
+	});
+	return reg ^ REG_FINAL;
 }
 
 template<typename T>
