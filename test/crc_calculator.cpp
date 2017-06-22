@@ -5,18 +5,22 @@
 #include "gtest/gtest.h"
 
 using type = uint32_t;
+constexpr type kTypeInit = UINT32_MAX;
+constexpr type kTypeFinal = UINT32_MAX;
 
 
 class CRCCalculatorTest: public testing::Test {
 protected:
 	virtual void SetUp() {
-		crc_calc_ = new CRCCalculator<type>{poly_};
+		crc_calc_ = new CRCCalculator<type>{poly_, poly_init_, poly_final};
 	}
 	virtual void TearDown() {
 		delete crc_calc_;
 	}
 
 	static constexpr type poly_ = 0xedb88320;
+	static constexpr type poly_init_ = kTypeInit;
+	static constexpr type poly_final = kTypeFinal;
 	static constexpr type lookup_table_[LOOKUP_TABLE_SIZE] = {
 	0x00000000, 0x77073096, 0xee0e612c, 0x990951ba,
 	0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,

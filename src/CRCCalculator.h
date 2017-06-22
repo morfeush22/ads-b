@@ -15,15 +15,15 @@
 
 #define BYTE 8
 #define LOOKUP_TABLE_SIZE 256
-#define REG_FINAL UINT32_MAX
-#define REG_INIT UINT32_MAX
+//#define REG_FINAL UINT32_MAX
+//#define REG_INIT UINT32_MAX
 #define TOP_BIT_MASK 0x1
 
 
 template<typename T>
 class CRCCalculator {
 public:
-	CRCCalculator(T poly);
+	CRCCalculator(T poly, T poly_init, T poly_final);
 	virtual ~CRCCalculator();
 	T poly() const {
 		return poly_;
@@ -37,11 +37,13 @@ private:
 	void CalculateLookupTable();
 
 	T poly_;
+	const T poly_init_;
+	const T poly_final_;
 	std::array<T, LOOKUP_TABLE_SIZE> lookup_table_;
 };
 
 template<typename T>
-CRCCalculator<T>::CRCCalculator(T poly): poly_(poly) {
+CRCCalculator<T>::CRCCalculator(T poly, T poly_init, T poly_final): poly_(poly),  poly_init_(poly_init), poly_final_(poly_final) {
 	CalculateLookupTable();
 }
 
@@ -51,11 +53,11 @@ CRCCalculator<T>::~CRCCalculator() {
 
 template<typename T>
 T CRCCalculator<T>::CalculateCRC(const std::vector<uint8_t> &msg) {
-	T reg = REG_INIT;
+	T reg = poly_init_;
 	std::for_each(msg.begin(), msg.end(), [&reg, this](const uint8_t &byte) {
 		reg = (reg >> BYTE) ^ lookup_table_[static_cast<uint8_t>(reg) ^ byte];
 	});
-	return reg ^ REG_FINAL;
+	return reg ^ poly_final_;
 }
 
 template<typename T>
