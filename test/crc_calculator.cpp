@@ -1,6 +1,7 @@
 #include <array>
 #include <ctype.h>
 #include <vector>
+#include <memory>
 #include "CRCCalculator.h"
 #include "gtest/gtest.h"
 
@@ -12,16 +13,18 @@ constexpr type kTypeFinal = UINT32_MAX;
 class CRCCalculatorTest: public testing::Test {
 protected:
 	virtual void SetUp() {
-		crc_calc_ = new CRCCalculator<type>{poly_, poly_init_, poly_final};
+		crc_calc_ = std::make_unique<CRCCalculator<type>>(
+                        poly_, poly_init_, poly_final);
 	}
 	virtual void TearDown() {
-		delete crc_calc_;
+		//delete crc_calc_;
 	}
 
 	static constexpr type poly_ = 0xedb88320;
 	static constexpr type poly_init_ = kTypeInit;
 	static constexpr type poly_final = kTypeFinal;
-	static constexpr type lookup_table_[LOOKUP_TABLE_SIZE] = {
+
+	static constexpr std::array<type, LOOKUP_TABLE_SIZE> lookup_table_ = {
 	0x00000000, 0x77073096, 0xee0e612c, 0x990951ba,
 	0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
 	0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988,
@@ -87,16 +90,19 @@ protected:
 	0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94,
 	0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
 	};
-	CRCCalculator<type> *crc_calc_;
+
+	std::unique_ptr<CRCCalculator<type>> crc_calc_;
 };
 
 constexpr type CRCCalculatorTest::poly_;
-constexpr type CRCCalculatorTest::lookup_table_[];
+constexpr type CRCCalculatorTest::poly_init_;
+constexpr type CRCCalculatorTest::poly_final;
+constexpr std::array<type, LOOKUP_TABLE_SIZE> CRCCalculatorTest::lookup_table_;
 
 TEST_F(CRCCalculatorTest, CalculatedLookupTableValues) {
 	std::array<type, LOOKUP_TABLE_SIZE> lt = crc_calc_->lookup_table();
 	for(int i = 0; i < LOOKUP_TABLE_SIZE; ++i)
-		EXPECT_EQ(lookup_table_[i], lt[i]);
+		EXPECT_EQ(lookup_table_.at(i), lt.at(i));
 }
 
 TEST_F(CRCCalculatorTest, CalculatedCRC) {
